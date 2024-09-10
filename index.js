@@ -10,6 +10,10 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+app.get("/sign-in", (req, res) => {
+  res.render("signin.ejs");
+});
+
 app.listen(port, () => {
   console.log(`Server live on ${port}`);
 });
