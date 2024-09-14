@@ -22,50 +22,59 @@
             placeholder="Post Title"
             type="text"
             name="title"
+            required
           />
           <input
             class="form-control"
             placeholder="Author"
             type="text"
             name="author"
+            required
           />
           <textarea
             class="form-control"
             placeholder="Vent a little."
             name="post"
             rows="5"
+            required
           ></textarea>
           <button class="btn btn-primary" type="submit">Post</button>
         </form>
       </div>
 
       <div class="posts">
-        <% if (locals.posts) { %>
-        <ul class="list-group">
-          <% for (let index = 0; index < posts.length; index++) { %>
+        <% if (locals.posts.length > 0) { %>
+        <ul class="list-group list-group-flush">
+          <% for (let index = posts.length - 1; index >= 0; index--) { %>
           <li class="list-group-item">
-            <div class="card" style="width: 45rem">
+            <div class="card card-width"sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHzx>
               <div
                 class="card-body d-flex justify-content-between align-items-start"
               >
                 <div>
                   <h5 class="card-title"><%= posts[index].title %></h5>
-                  <h6 class="card-subtitle mb-2 text-body-secondary">
-                    Time posted: <%= posts[index].time %>
+                  <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                    By: <%= posts[index].author %>
                   </h6>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">
+                    Posted on: <%= posts[index].time %>
+                  </h6>
+                  
                   <p class="card-text"><%= posts[index].post %></p>
                 </div>
                 <div class="d-flex flex-column align-items-end">
-                  <a
-                    href="/edit/<%= posts[index]._id %>"
-                    class="btn btn-secondary mb-2"
-                  >
-                    <img src="images/pencil.svg" height="20" />
-                  </a>
-                  <form action="/delete/<%= posts[index]._id %>" method="POST">
-                    <button type="submit" class="btn btn-danger">
-                      <img src="images/trash.svg" height="20" />
+                  <form action="/edit" method="POST">
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="<%= posts[index].id %>"
+                    />
+                    <button type="submit" class="btn btn-secondary">
+                      <img src="images/pencil.svg" height="20" />
                     </button>
+                  </form>
+                  <form action="/delete/<%= posts[index].id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger" type="submit"><img src="images/trash.svg" height="20"></button>
                   </form>
                 </div>
               </div>
