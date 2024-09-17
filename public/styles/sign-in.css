@@ -23,3 +23,12 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.header-container {
+  display: flex;
+  align-items: center; /* Vertically aligns items */
+}
+
+.header-container img {
+  margin-right: 10px; /* Optional: adds spacing between the img and h1 */
+}
