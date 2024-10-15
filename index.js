@@ -1,9 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
+import pg from "pg";
 
 const app = express();
 const port = 3000;
+const db = new pg.Client({
+  user: "postgres",
+  host: "localhost",
+  database: "blogspace",
+  password: "Oak-Cheese-18",
+  port: 5432,
+});
+
+db.connect();
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
@@ -13,13 +24,36 @@ app.set("view engine", "ejs");
 let postToView = [];
 let id = 0;
 
+// Call connect function
+
 console.log(postToView);
 
 app.get("/sign-in", (req, res) => {
   res.render("signin.ejs");
 });
 
+app.get("/signup", (req, res) => {
+  res.render("signup.ejs");
+});
+
 app.get("/", (req, res) => {
+  db.query("SELECT * FROM blogs", (err, res) => {
+    if (err) {
+      console.log(err.stack);
+    } else {
+      let newPost = {};
+      for (let index = 0; index < res.rows.length; index++) {
+        newPost.title = res.rows[index].title;
+        newPost.author = res.rows[index].creator_name;
+        newPost.time = res.rows[index].date_created;
+        newPost.post = res.rows[index].body;
+        newPost.id = res.rows[index].blog_id;
+
+        postToView.push(newPost);
+      }
+    }
+  });
+
   res.render("index", { posts: postToView });
 });
 
@@ -66,6 +100,32 @@ app.post("/edit", (req, res) => {
   }
 
   res.render("edit.ejs", { post: postToChange });
+});
+
+app.post("/signup-submit", (req, res) => {
+  console.log(req.body);
+
+  db.query(
+    `SELECT * FROM users WHERE name='${req.body.username}'`,
+    (err, response) => {
+      if (err) {
+        console.log(err.stack);
+      } else {
+        let users = response.rows.length;
+
+        console.log(response.rows[0]);
+        console.log(users);
+
+        if (users > 0) {
+          res.send("You already have an account please sign in!");
+
+          res.redirect("/sign-in");
+        }
+
+        res.redirect("/");
+      }
+    }
+  );
 });
 
 app.post("/edit-submit", (req, res) => {
