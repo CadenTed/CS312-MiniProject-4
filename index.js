@@ -54,6 +54,8 @@ app.get("/", (req, res) => {
     }
   });
 
+  console.log(postToView);
+
   res.render("index", { posts: postToView });
 });
 
@@ -76,6 +78,8 @@ app.post("/post-submit", (req, res) => {
 
     return `${month}/${day}/${year} at ${formattedHours}:${minutes} ${ampm}`;
   }
+
+  db.query("INSERT INTO blogs ");
 
   postToView.push({
     title: req.body.title,
@@ -120,12 +124,38 @@ app.post("/signup-submit", (req, res) => {
           res.send("You already have an account please sign in!");
 
           res.redirect("/sign-in");
+        } else {
+          db.query("INSERT INTO users (password, name) VALUES ($1, $2)", [
+            req.body.password,
+            req.body.username,
+          ]);
         }
 
         res.redirect("/");
       }
     }
   );
+});
+
+app.post("/signin-submit", async (req, res) => {
+  const result = await db.query("SELECT * FROM users WHERE name=$1", [
+    req.body.username,
+  ]);
+
+  console.log(result);
+
+  if (result.rows.length > 0) {
+    let user = result.rows[0];
+    let storedPass = user.password;
+
+    if (storedPass == req.body.password) {
+      res.redirect("/");
+    } else {
+      res.send("Incorrect password!");
+    }
+  } else {
+    res.send("User not found!");
+  }
 });
 
 app.post("/edit-submit", (req, res) => {
