@@ -21,6 +21,27 @@ app.get("/api/post", (req, res) => {
   res.json(posts);
 });
 
+app.delete("/api/delete/:id", (req, res) => {
+  const postId = parseInt(req.params.id, 10); // Parse ID from request parameters
+  console.log(`Deleting post with ID: ${postId}`);
+  const originalLength = posts.length; // Store original length for comparison
+
+  // Filter out the post with the specified ID
+  posts = posts.filter((post) => post.id !== postId);
+  console.log(posts);
+
+  // Check if any posts were deleted
+  if (posts.length < originalLength) {
+    return res.json({
+      message: "Post deleted",
+    });
+  } else {
+    return res.status(404).json({
+      message: "Post not found",
+    });
+  }
+});
+
 app.post("/api/post", (req, res) => {
   console.log(req.body);
   const { title, author, content, id } = req.body;

@@ -82,7 +82,6 @@ function Edit({ setPost }) {
         // Replace the last element with `data`
         return [...prev.slice(0, -1), data];
       });
-      console.log(data);
     } catch (error) {
       console.error(error);
     }

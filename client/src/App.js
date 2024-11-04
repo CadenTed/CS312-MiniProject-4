@@ -46,15 +46,19 @@ function App() {
               <div className="flex-container">
                 <PostForm setRefresh={setRefreshPosts} />
                 {posts.length > 0 ? (
-                  posts
-                    .slice()
-                    .reverse()
-                    .map(
-                      (
-                        post,
-                        index // Reverse the array
-                      ) => <Post key={index} id={index} post={post} />
+                  posts.map(
+                    (
+                      post,
+                      index // Reverse the array
+                    ) => (
+                      <Post
+                        key={index}
+                        id={index}
+                        post={post}
+                        refreshPosts={setRefreshPosts}
+                      />
                     )
+                  )
                 ) : (
                   <h5>Nothing going on around here</h5>
                 )}

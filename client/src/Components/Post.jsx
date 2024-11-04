@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../PostForm.css";
 
-function Post({ id, post }) {
+function Post({ id, post, refreshPosts }) {
   const { title, author, content } = post;
 
   useEffect(() => {
@@ -41,24 +41,18 @@ function Post({ id, post }) {
     }
   };
 
-  const onDelete = async () => {
-    try {
-      const response = await fetch("/api/delete", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
+  const deletePost = () => {
+    fetch(`/api/delete/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Delete", data); // Log success message
+        refreshPosts((prev) => !prev);
+      })
+      .catch((error) => {
+        console.error(error);
       });
-      if (!response.ok) {
-        throw new Error("Failed to delete post");
-      }
-
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   // Function to get formatted date and time
@@ -114,7 +108,7 @@ function Post({ id, post }) {
                 </form>
                 <form>
                   <button
-                    onClick={onDelete}
+                    onClick={deletePost}
                     className="btn btn-danger"
                     type="submit"
                   >

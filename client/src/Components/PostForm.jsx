@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../PostForm.css";
 
@@ -9,12 +9,6 @@ function PostForm({ setRefresh }) {
 
   function handleForm(event) {
     event.preventDefault();
-
-    const newPost = {
-      title: title,
-      author: author,
-      content: post,
-    };
 
     setTitle("");
     setAuthor("");
@@ -44,8 +38,6 @@ function PostForm({ setRefresh }) {
       })
       .catch((error) => console.error("Error adding post:", error));
   };
-
-
 
   return (
     <div className="post-form">
