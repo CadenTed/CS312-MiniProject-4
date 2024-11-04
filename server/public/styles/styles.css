@@ -1,0 +1,37 @@
+.flex-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.post-form {
+  width: 45rem;
+  padding: 2em;
+}
+
+@media only screen and (max-width: 700px) {
+  .post-form {
+    width: 25rem;
+    padding: 2em;
+  }
+}
+
+.posts {
+  padding: 3em;
+}
+
+.card-width {
+  width: 45rem;
+}
+
+@media only screen and (max-width: 700px) {
+  .card-width {
+    width: 25rem;
+  }
+}
+
+h3 {
+  text-align: center;
+}
